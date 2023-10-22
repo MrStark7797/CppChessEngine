@@ -106,10 +106,10 @@ typedef struct {
 
 #define FR2SQ(file, rank) ((21 +(file)) + ((rank)*10)) //marco which turns file and rank into the 120 bitboard square
 #define SQ64(sq120) Sq120ToSq64[sq120] //macro to shorten what is typed.
-#define POP(bitboard) PopBit(bitboard)
-#define COUNT(bitboard) CountBits(bitboard)
-#define CLEARBIT(bb,sq) ((bb) &= ClearMask[(sq)]) //takes bitboard and square and performs an and operation
-#define SETBIT(bb,sq) ((bb) |= SetMask[(sq)]) //takes bitboard and square and performs an or operation
+#define POP(bit) PopBit(bit)
+#define COUNT(bit) CountBits(bit)
+#define CLEARBIT(bitboard,sq) ((bitboard) &= ClearMask[(sq)]) //takes bitboard and square and performs an and operation
+#define SETBIT(bitboard,sq) ((bitboard) |= SetMask[(sq)]) //takes bitboard and square and performs an or operation
 
 //GLOBALS
 extern int Sq120ToSq64[BRD_SQ_NUM];

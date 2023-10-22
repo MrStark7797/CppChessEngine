@@ -10,10 +10,22 @@ int main() {
     
     int index = 0;
     U64 playBitBoard = 0ULL;
-
-    SETBIT(playBitBoard, 61);
-    PrintBitBoard(playBitBoard);
-
+    int input;
+    cin >> input;
+    while (-1 < input){
+        SETBIT(playBitBoard, input);
+        PrintBitBoard(playBitBoard);
+        cin >> input;
+    };
+    cout << "clear";
+    cin >> input;
+    while (-1 < input){
+        CLEARBIT(playBitBoard, input);
+        PrintBitBoard(playBitBoard);
+        cin >> input;
+    };
     
+
+
     return 0;
 }
