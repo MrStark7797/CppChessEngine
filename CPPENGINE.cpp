@@ -8,12 +8,12 @@ using namespace std;
 int main() {
     AllInit();
     
+    int index = 0;
     U64 playBitBoard = 0ULL;
 
-    playBitBoard |= (1ULL << SQ64(D2));
-    playBitBoard |= (1ULL << SQ64(D3));
-    playBitBoard |= (1ULL << SQ64(D4));
+    SETBIT(playBitBoard, 61);
+    PrintBitBoard(playBitBoard);
 
-
-
+    
+    return 0;
 }

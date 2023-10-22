@@ -13,13 +13,13 @@ int PopBit(U64 *bb) {
   unsigned int fold = (unsigned) ((b & 0xffffffff) ^ (b >> 32));
   *bb &= (*bb - 1);
   return BitTable[(fold * 0x783a9b23) >> 26];
-}
+} //takes the first bit starting at the least significant bit. setting it to zero.
 
 int CountBits(U64 b) {
   int r;
   for(r = 0; b; r++, b &= b - 1);
   return r;
-}
+} //counts the total number iof bits
 
 void PrintBitBoard(U64 bb) {
     //Used to print and visualise any bitboard on the screen

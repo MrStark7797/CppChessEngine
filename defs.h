@@ -1,7 +1,8 @@
 #ifndef DEFS_H
 #define DEFS_H 
 
-#include "stdlib.h"
+
+#include <iostream>
 
 #define DEBUG
 
@@ -105,10 +106,16 @@ typedef struct {
 
 #define FR2SQ(file, rank) ((21 +(file)) + ((rank)*10)) //marco which turns file and rank into the 120 bitboard square
 #define SQ64(sq120) Sq120ToSq64[sq120] //macro to shorten what is typed.
+#define POP(bitboard) PopBit(bitboard)
+#define COUNT(bitboard) CountBits(bitboard)
+#define CLEARBIT(bb,sq) ((bb) &= ClearMask[(sq)]) //takes bitboard and square and performs an and operation
+#define SETBIT(bb,sq) ((bb) |= SetMask[(sq)]) //takes bitboard and square and performs an or operation
 
 //GLOBALS
 extern int Sq120ToSq64[BRD_SQ_NUM];
 extern int Sq64ToSq120[64];
+extern U64 SetMask[64];
+extern U64 ClearMask[64];
 
 
 //FUNCTIONS
