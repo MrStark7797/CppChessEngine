@@ -3,21 +3,17 @@ using namespace std;
 
 #include "defs.h"
 #include "init.cpp"
-
+#include "bitboard.cpp"
 
 int main() {
     AllInit();
-    for(int index = 0; index < BRD_SQ_NUM; ++index){
-        if(index%10==0) printf("\n");
-        printf("%5d",Sq120ToSq64[index]);
-    }
+    
+    U64 playBitBoard = 0ULL;
 
-    printf("\n");
-    printf("\n");
+    playBitBoard |= (1ULL << SQ64(D2));
+    playBitBoard |= (1ULL << SQ64(D3));
+    playBitBoard |= (1ULL << SQ64(D4));
 
-    for(int index = 0; index < 64; ++index){
-        if(index%8==0) printf("\n");
-        printf("%5d",Sq64ToSq120[index]);
-    }
-    return 0;
+
+
 }

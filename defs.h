@@ -1,6 +1,22 @@
 #ifndef DEFS_H
 #define DEFS_H 
 
+#include "stdlib.h"
+
+#define DEBUG
+
+#ifndef DEBUG
+#define ASSERT(n)
+#else
+#define ASSERT(n) \
+if(!(n)) { \
+printf("%s - Failed",#n); \
+printf("On %s ",__DATE__); \
+printf("At %s ",__TIME__); \
+printf("In File %s ",__FILE__); \
+printf("At Line %d\n",__LINE__); \
+exit(1);}
+#endif
 
 
 //creates bitboard
@@ -80,11 +96,15 @@ typedef struct {
     int majPiece[3]; //R &Q
     int minPiece[3]; //B&N
     S_UNDO history[MAXGAMEMOVES];
+    //peice list
+    int pList[13][10];
+
 } S_BOARD;
 
 //MARCROS
 
-#define FR2SQ(f, r) ((21 +(f)) + ((r)*10)) //marco which turns file and rank into the 120 bitboard square
+#define FR2SQ(file, rank) ((21 +(file)) + ((rank)*10)) //marco which turns file and rank into the 120 bitboard square
+#define SQ64(sq120) Sq120ToSq64[sq120] //macro to shorten what is typed.
 
 //GLOBALS
 extern int Sq120ToSq64[BRD_SQ_NUM];
@@ -95,5 +115,7 @@ extern int Sq64ToSq120[64];
 
 extern void AllInit();
 
+extern void PrintBitBoard(U64 bb);
+extern int PopBit(U64 *bb);
 
 #endif // DEFS_H
