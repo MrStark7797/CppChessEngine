@@ -57,7 +57,7 @@ enum {
     A5 = 61, B5, C5, D5, E5, F5, G5, H5,
     A6 = 71, B6, C6, D6, E6, F6, G6, H6,
     A7 = 81, B7, C7, D7, E7, F7, G7, H7,
-    A8 = 91, B8, C8, D8, E8, F8, G8, H8, NO_SQ
+    A8 = 91, B8, C8, D8, E8, F8, G8, H8, NO_SQ, OFFBOARD
 };
 
 enum {FALSE, TRUE};
@@ -81,14 +81,14 @@ typedef struct {
 
     int side2move;
     int enPas;
-    int fiftymove;
+    int fiftyMove;
 
     int ply;
-    int hisply;
+    int hisPly;
 
     int castlePerm;
 
-    U64 posKey;
+    U64 posKey; //unique number representing position on the board links with history to determine if their are repititions
 
     //arrays used to store number of piece
     int pieceNum[13];
@@ -96,6 +96,7 @@ typedef struct {
     int bigPiece[3]; //anything not a pawn
     int majPiece[3]; //R &Q
     int minPiece[3]; //B&N
+    int material[2]; 
     S_UNDO history[MAXGAMEMOVES];
     //peice list
     int pList[13][10];
@@ -105,7 +106,9 @@ typedef struct {
 //MARCROS
 
 #define FR2SQ(file, rank) ((21 +(file)) + ((rank)*10)) //marco which turns file and rank into the 120 bitboard square
-#define SQ64(sq120) Sq120ToSq64[sq120] //macro to shorten what is typed.
+
+#define SQ64(sq120) (Sq120ToSq64[(sq120)]) //macro to shorten what is typed.
+#define SQ120(sq64) (Sq64ToSq120[(sq64)]) //Turns square in U64 to square into U120 for resetting board
 #define POP(bit) PopBit(bit)
 #define COUNT(bit) CountBits(bit)
 #define CLEARBIT(bitboard,sq) ((bitboard) &= ClearMask[(sq)]) //takes bitboard and square and performs an and operation
@@ -116,13 +119,24 @@ extern int Sq120ToSq64[BRD_SQ_NUM];
 extern int Sq64ToSq120[64];
 extern U64 SetMask[64];
 extern U64 ClearMask[64];
+extern U64 PieceKeys[13][120];
+extern U64 SideKey;
+extern U64 CastleKeys[16];
 
 
 //FUNCTIONS
-
+//init.cpp
 extern void AllInit();
 
+//bitboard.cpp
 extern void PrintBitBoard(U64 bb);
 extern int PopBit(U64 *bb);
+extern int CountBits(U64 b);
+
+// hashkeys.c
+extern U64 GeneratePosKey(const S_BOARD *pos);
+
+// board.c
+extern void ResetBoard(S_BOARD *pos);
 
 #endif // DEFS_H
