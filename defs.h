@@ -3,6 +3,7 @@
 
 
 #include <iostream>
+using namespace std;
 
 #define DEBUG
 
@@ -23,11 +24,13 @@ exit(1);}
 //creates bitboard
 typedef unsigned long long U64;
 
-const string NAME = "Slice 1.0";
+const std::string NAME = "Slice 1.0";
 
 const int BRD_SQ_NUM = 120; //board will have 8x8 board where the game is played and 56 spare tiles to work as boarder squares
 
 const int MAXGAMEMOVES = 2048;
+
+#define START_FEN  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 /*defines peices stored first letter shows colour, second letter shows peice type
 P = Pawn = 1
 N = KNight = 2
