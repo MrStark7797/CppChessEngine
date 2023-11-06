@@ -69,8 +69,43 @@ int ParseFen(char *fen, S_BOARD *pos) {
         }
 		fen++;
 	}
+	ASSERT(*fen == 'w' || *fen == 'b'); //FEN must either point to a w or a b otherwise the piece is an incorrect colour
+	
+	pos->side2move = (*fen == 'w') ? WHITE : BLACK; // an if statement where if the fen points to a white peice its white if not is black,
+	fen += 2;
 
+	for (i = 0; i < 4; i++) {
+        if (*fen == ' ') {
+            break;
+        }
+		switch(*fen) {
+			case 'K': pos->castlePerm |= WKCA; break;
+			case 'Q': pos->castlePerm |= WQCA; break;
+			case 'k': pos->castlePerm |= BKCA; break;
+			case 'q': pos->castlePerm |= BQCA; break;
+			default:	     break;
+        }
+		fen++; //checks all values in the Castling Rules to see which sides can castle and once iterating through it will break.
+	}
+	fen++;
+	ASSERT(pos->castlePerm>=0 && pos->castlePerm <= 15); 
+	//If En Pessaunt isnt pointing towards a dash there is a square. Therefore the next two char are a letter and a number
+	if (*fen != '-') {
+		file = fen[0] - 'a';
+		rank = fen[1] - '1';
 
+		ASSERT(file>=FILE_A && file <= FILE_H);
+		ASSERT(rank>=RANK_1 && rank <= RANK_8);
+
+		pos->enPas = FR2SQ(file,rank);
+    }
+
+	pos->posKey = GeneratePosKey(pos); //generates hashkey
+
+	//UpdateListsMaterial(pos);
+
+	return 0;
+	
 }
 void ResetBoard(S_BOARD *pos) {
 
