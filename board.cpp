@@ -1,6 +1,7 @@
 #include <iostream>
 #include "defs.h"
-
+#include <string> 
+#include "hashkeys.cpp"
 
 int ParseFen(char *fen, S_BOARD *pos) {
 
@@ -148,3 +149,34 @@ void ResetBoard(S_BOARD *pos) {
     //resets all colours to both colors and all other permisions and rules to 0. 
     //sets colours to both so we can assert if a peice is defined as both colours.
 } 
+
+void PrintBoard(const S_BOARD *pos){
+	int sq,file,rank,piece;
+
+	printf("\nGame Board:\n\n");
+	//starting at the 8th rank decending a rank at a time printing rank number 
+	for(rank = RANK_8; rank >= RANK_1; rank--) {
+		printf("%d  ",rank+1);
+		for(file = FILE_A; file <= FILE_H; file++) {
+			sq = FR2SQ(file,rank);
+			piece = pos->pieces[sq];
+			printf("%3c",PceChar[piece]);
+		}
+		printf("\n");
+	}
+	//
+	printf("\n   ");
+	for(file = FILE_A; file <= FILE_H; file++) {
+		printf("%3c",'a'+file);
+	}
+	printf("\n");
+	printf("side:%c\n",SideChar[pos->side2move]);
+	printf("enPas:%d\n",pos->enPas);
+	printf("castle:%c%c%c%c\n",
+			pos->castlePerm & WKCA ? 'K' : '-',
+			pos->castlePerm & WQCA ? 'Q' : '-',
+			pos->castlePerm & BKCA ? 'k' : '-',
+			pos->castlePerm & BQCA ? 'q' : '-'
+			); //conditional stating that if castle permition and the castling 4 bit number are the same print the corrosponding letter else print a -
+	printf("PosKey:%llX\n",pos->posKey);
+}

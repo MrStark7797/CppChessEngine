@@ -30,7 +30,9 @@ const int BRD_SQ_NUM = 120; //board will have 8x8 board where the game is played
 
 const int MAXGAMEMOVES = 2048;
 
-#define START_FEN  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+string START_FEN_STRING = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+char* START_FEN = START_FEN_STRING.data(); 
+
 /*defines peices stored first letter shows colour, second letter shows peice type
 P = Pawn = 1
 N = KNight = 2
@@ -125,6 +127,10 @@ extern U64 ClearMask[64];
 extern U64 PieceKeys[13][120];
 extern U64 SideKey;
 extern U64 CastleKeys[16];
+extern char PceChar[]; //four arrays which are indexed in order to print peice side rank and file
+extern char SideChar[];
+extern char RankChar[];
+extern char FileChar[];
 
 
 //FUNCTIONS
@@ -141,5 +147,6 @@ extern U64 GeneratePosKey(const S_BOARD *pos);
 
 // board.c
 extern void ResetBoard(S_BOARD *pos);
-
+extern void PrintBoard(const S_BOARD *pos);
+extern int ParseFen(char *fen, S_BOARD *pos);
 #endif // DEFS_H
