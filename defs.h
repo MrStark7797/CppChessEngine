@@ -98,9 +98,9 @@ typedef struct {
     //arrays used to store number of piece
     int pieceNum[13];
     //stores pieces by colour
-    int bigPiece[3]; //anything not a pawn
-    int majPiece[3]; //R &Q
-    int minPiece[3]; //B&N
+    int bigPiece[2]; //anything not a pawn
+    int majPiece[2]; //R &Q
+    int minPiece[2]; //B&N
     int material[2]; 
     S_UNDO history[MAXGAMEMOVES];
     //peice list
@@ -132,7 +132,15 @@ extern char SideChar[];
 extern char RankChar[];
 extern char FileChar[];
 
+extern int PieceBig[13];
+extern int PieceMaj[13];
+extern int PieceMin[13];
+extern int PieceVal[13];
+extern int PieceCol[13];
+extern int PiecePawn[13];
 
+extern int FilesBrd[BRD_SQ_NUM];
+extern int RanksBrd[BRD_SQ_NUM];
 //FUNCTIONS
 //init.cpp
 extern void AllInit();
@@ -149,4 +157,8 @@ extern U64 GeneratePosKey(const S_BOARD *pos);
 extern void ResetBoard(S_BOARD *pos);
 extern void PrintBoard(const S_BOARD *pos);
 extern int ParseFen(char *fen, S_BOARD *pos);
+extern void UpdateListsMaterial(S_BOARD *pos);
+extern int CheckBoard(const S_BOARD *pos);
+
+
 #endif // DEFS_H

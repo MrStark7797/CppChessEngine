@@ -2,6 +2,135 @@
 #include "defs.h"
 #include <string> 
 #include "hashkeys.cpp"
+int CheckBoard(const S_BOARD *pos) {
+	//function with asserts to trigger if there is a problem
+	//sets up tempory to hold infomation passing through the board filling up the tempory values, checking at the end to see if they are the same as the values we have on the board
+	int t_pceNum[13] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	int t_bigPce[2] = { 0, 0};
+	int t_majPce[2] = { 0, 0};
+	int t_minPce[2] = { 0, 0};
+	int t_material[2] = { 0, 0};
+
+	int sq64,t_piece,t_pce_num,sq120,colour,pcount;
+
+	U64 t_pawns[3] = {0ULL, 0ULL, 0ULL};
+
+	t_pawns[WHITE] = pos->pawns[WHITE];
+	t_pawns[BLACK] = pos->pawns[BLACK];
+	t_pawns[BOTH] = pos->pawns[BOTH];
+
+	// check piece lists
+	//looping by piece type and then piece number
+	for(t_piece = wP; t_piece <= bK; ++t_piece) {
+		for(t_pce_num = 0; t_pce_num < pos->pieceNum[t_piece]; ++t_pce_num) {
+			sq120 = pos->pList[t_piece][t_pce_num]; //Sets the value at t_peice and t_pce_num to the same as what SHOULD be in the piece list 
+			ASSERT(pos->pieces[sq120]==t_piece); //checks if the tempory piece list is the same as what is currently stored on the board array.
+		}
+	}
+	// check piece count and other counters
+	for(sq64 = 0; sq64 < 64; ++sq64) {
+		sq120 = SQ120(sq64);
+		t_piece = pos->pieces[sq120];
+		t_pceNum[t_piece]++;
+		colour = PieceCol[t_piece];
+		if( PieceBig[t_piece] == TRUE) t_bigPce[colour]++;
+		if( PieceMin[t_piece] == TRUE) t_minPce[colour]++;
+		if( PieceMaj[t_piece] == TRUE) t_majPce[colour]++;
+
+		t_material[colour] += PieceVal[t_piece];
+	} //increments through the square 64 then converts it to square 120
+	//incrementsthrough all Big, Maj and Min peices to check if they are correct
+	//used for when incrementing though the board when undoing moves
+	for(t_piece = wP; t_piece <= bK; ++t_piece) {
+		ASSERT(t_pceNum[t_piece]==pos->pieceNum[t_piece]);
+	} //assert looping through to check if there are the same number of pieces in the temp pieceNum as there are in the actual pieceNum and if the peice types are the same
+
+	// check bitboards count
+	pcount = CountBits(t_pawns[WHITE]);
+	ASSERT(pcount == pos->pieceNum[wP]);
+	pcount = CountBits(t_pawns[BLACK]);
+	ASSERT(pcount == pos->pieceNum[bP]);
+	pcount = CountBits(t_pawns[BOTH]);
+	ASSERT(pcount == (pos->pieceNum[bP] + pos->pieceNum[wP]));
+	//checks that the pawn count is equal to the pawn count of the position
+
+	// check bitboards squares
+	while(t_pawns[WHITE]) {
+		sq64 = POP(&t_pawns[WHITE]);
+		ASSERT(pos->pieces[SQ120(sq64)] == wP);
+	}
+	//checks pawns in pieces that they must either be black or white pawn on the board untill all pieces are checked
+	while(t_pawns[BLACK]) {
+		sq64 = POP(&t_pawns[BLACK]);
+		ASSERT(pos->pieces[SQ120(sq64)] == bP);
+	}
+
+	while(t_pawns[BOTH]) {
+		sq64 = POP(&t_pawns[BOTH]);
+		ASSERT( (pos->pieces[SQ120(sq64)] == bP) || (pos->pieces[SQ120(sq64)] == wP) );
+	}
+	ASSERT(t_material[WHITE]==pos->material[WHITE] && t_material[BLACK]==pos->material[BLACK]);
+	ASSERT(t_minPce[WHITE]==pos->minPiece[WHITE] && t_minPce[BLACK]==pos->minPiece[BLACK]);
+	ASSERT(t_majPce[WHITE]==pos->majPiece[WHITE] && t_majPce[BLACK]==pos->majPiece[BLACK]);
+	ASSERT(t_bigPce[WHITE]==pos->bigPiece[WHITE] && t_bigPce[BLACK]==pos->bigPiece[BLACK]);
+	
+	ASSERT(pos->side2move==WHITE || pos->side2move==BLACK);//side must be white or black
+	ASSERT(GeneratePosKey(pos)==pos->posKey); //when xoring the key we must check if the key is correct.
+
+	ASSERT(pos->enPas==NO_SQ || ( RanksBrd[pos->enPas]==RANK_6 && pos->side2move == WHITE)
+		 || ( RanksBrd[pos->enPas]==RANK_3 && pos->side2move == BLACK)); //Last move must have NO enpas square or must be rank 6 if its whites move or rank 3 if its blacks move
+
+	ASSERT(pos->pieces[pos->KingSq[WHITE]] == wK);
+	ASSERT(pos->pieces[pos->KingSq[BLACK]] == bK);
+
+
+
+
+	return TRUE;
+
+
+
+
+}
+
+void UpdateListsMaterial(S_BOARD *pos) {
+
+	int piece,sq,index,colour;
+
+	for(index = 0; index < BRD_SQ_NUM; ++index) {
+		sq = index;
+		piece = pos->pieces[index];
+		
+		if(piece!=OFFBOARD && piece!= EMPTY) {
+			colour = PieceCol[piece];
+			
+
+		    if( PieceBig[piece] == TRUE) pos->bigPiece[colour]++;
+		    if( PieceMin[piece] == TRUE) pos->minPiece[colour]++;
+		    if( PieceMaj[piece] == TRUE) pos->majPiece[colour]++;
+
+			pos->material[colour] += PieceVal[piece];
+
+			ASSERT(pos->pieceNum[piece] < 10 && pos->pieceNum[piece] >= 0);
+
+			pos->pList[piece][pos->pieceNum[piece]] = sq;
+			pos->pieceNum[piece]++;
+
+
+			if(piece==wK) pos->KingSq[WHITE] = sq;
+			if(piece==bK) pos->KingSq[BLACK] = sq;
+
+			if(piece==wP) {
+				SETBIT(pos->pawns[WHITE],SQ64(sq)); 
+				SETBIT(pos->pawns[BOTH],SQ64(sq));
+			} else if(piece==bP) {
+				SETBIT(pos->pawns[BLACK],SQ64(sq));
+				SETBIT(pos->pawns[BOTH],SQ64(sq));
+			} //For both statements if the peice is a pawn the bitboard of pawns are set to a one, if the peice is white it is set on the bitboard of white pawns to one at the square on the 64 grid and vice versa.
+
+		}
+	}
+}
 
 int ParseFen(char *fen, S_BOARD *pos) {
 
@@ -103,7 +232,10 @@ int ParseFen(char *fen, S_BOARD *pos) {
 
 	pos->posKey = GeneratePosKey(pos); //generates hashkey
 
-	//UpdateListsMaterial(pos);
+
+
+
+	UpdateListsMaterial(pos);
 
 	return 0;
 	
