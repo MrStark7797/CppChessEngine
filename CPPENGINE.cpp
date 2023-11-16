@@ -14,8 +14,6 @@ int main() {
     
     string FEN1_S = "8/8/2R2pk1/P5p1/8/5PK1/r4BP1/5b2 b - - 5 52;";
     
-
-
     S_BOARD board[1];
     char* FEN1 = FEN1_S.data();
     
@@ -23,6 +21,11 @@ int main() {
     ParseFen(FEN1, board);
     PrintBoard(board);
 
+    ASSERT(CheckBoard(board));
+
+    printf("Forced\n");
+
+    board->pieceNum[wP]--;
     ASSERT(CheckBoard(board));
 
 }
