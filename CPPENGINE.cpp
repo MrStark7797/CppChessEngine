@@ -23,9 +23,11 @@ int main() {
 
     ASSERT(CheckBoard(board));
 
-    printf("Forced\n");
+    int move = 0;
+    int from = 6; int to = 12;
+    int cap = wR; int prom = bR;
 
-    board->pieceNum[wP]--;
-    ASSERT(CheckBoard(board));
+    move = ((from)| (to << 7) | (cap << 14) | (prom << 20));
 
+    printf("\ndec:%d hex%x", move, move);
 }

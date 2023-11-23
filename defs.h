@@ -72,6 +72,11 @@ enum { WKCA = 1, WQCA = 2, BKCA = 4, BQCA = 8};
 
 typedef struct{
     int move;
+    int score;
+} S_MOVE;
+
+typedef struct{
+    int move;
     int castlePerml;
     int enPas;
     int fiftyMove;
@@ -107,6 +112,23 @@ typedef struct {
     int pList[13][10];
 
 } S_BOARD;
+
+// GAME MOVE
+
+#define FROMSQ(m) ((m) & 0x7F)
+#define TOSQ(m) (((m)>>7) & 0x7F)
+#define CAPTURED(m) (((m)>>14) & 0xF)
+#define PROMOTED(m) (((m)>>20) & 0xF)
+
+#define MFLAGEP 0x40000
+#define MFLAGPS 0x80000
+#define MFLAGCA 0x1000000
+
+#define MFLAGCAP 0x7C000
+#define MFLAGPROM 0xF00000
+
+#define NOMOVE 0
+
 
 //MARCROS
 
