@@ -29,6 +29,7 @@ const std::string NAME = "Slice 1.0";
 const int BRD_SQ_NUM = 120; //board will have 8x8 board where the game is played and 56 spare tiles to work as boarder squares
 
 const int MAXGAMEMOVES = 2048;
+const int MAXPOSITIONMOVES =256;
 
 string START_FEN_STRING = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 char* START_FEN = START_FEN_STRING.data(); 
@@ -74,7 +75,10 @@ typedef struct{
     int move;
     int score;
 } S_MOVE;
-
+typedef struct{
+    S_MOVE moves[MAXPOSITIONMOVES];
+    int count;
+} S_MOVELIST;
 typedef struct{
     int move;
     int castlePerml;
@@ -200,4 +204,9 @@ extern int CheckBoard(const S_BOARD *pos);
 //attack.cpp
 
 extern int SqAttacked(const int sq, const int side, const S_BOARD *pos);
+
+//io.cpp
+
+extern char *PrMove(const int move);
+extern char *PrSq(const int sq);
 #endif // DEFS_H
