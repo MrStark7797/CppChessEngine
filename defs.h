@@ -32,7 +32,7 @@ const int MAXGAMEMOVES = 2048;
 const int MAXPOSITIONMOVES =256;
 
 string START_FEN_STRING = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-char* START_FEN = START_FEN_STRING.data(); 
+const char* START_FEN = START_FEN_STRING.data(); 
 
 /*defines peices stored first letter shows colour, second letter shows peice type
 P = Pawn = 1
@@ -76,7 +76,7 @@ typedef struct{
     int score;
 } S_MOVE;
 typedef struct{
-    S_MOVE moves[MAXPOSITIONMOVES];
+    S_MOVE moves[MAXPOSITIONMOVES]; //contains array of S_MOVE structures upt to 256 moves
     int count;
 } S_MOVELIST;
 typedef struct{
@@ -209,4 +209,12 @@ extern int SqAttacked(const int sq, const int side, const S_BOARD *pos);
 
 extern char *PrMove(const int move);
 extern char *PrSq(const int sq);
+//validate.cpp
+
+extern int SqOnBoard(const int sq);
+extern int SideValid(const  int side);
+extern int FileRankValid(const int fr);
+extern int PieceValidEmpty(const int pce);
+extern int PieceVAlid(const int pce);
+
 #endif // DEFS_H

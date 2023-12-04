@@ -13,7 +13,9 @@ int SqAttacked(const int sq, const int side, const S_BOARD *pos) {
 
     int pce,index,t_sq,dir; //Defines the variables to hold a piece the indexing and temporary square
 	
-
+	ASSERT(SqOnBoard(sq));
+	ASSERT(SideValid(side));
+	ASSERT(CheckBoard(pos));
 	
 	// pawns
 	if(side == WHITE) { //if attacking side is white
