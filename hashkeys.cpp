@@ -1,7 +1,7 @@
 #include <iostream>
 #include "defs.h"
 
-U64 GeneratePosKey(const S_BOARD *pos) {
+U64 GenPosKey(const S_BOARD *pos) {
 
 	int sq = 0;
 	U64 finalKey = 0;

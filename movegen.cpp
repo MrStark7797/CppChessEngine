@@ -10,31 +10,26 @@ static void AddQuietMove( const S_BOARD *pos, int move, S_MOVELIST *list ) {
 
 
 	list->moves[list->count].move = move;
-    list->moves[list->count].score = move;
+    list->moves[list->count].score = 0;
     list->count++;
 }
 static void AddCaptureMove( const S_BOARD *pos, int move, S_MOVELIST *list ) {
 
 
 	list->moves[list->count].move = move;
-    list->moves[list->count].score = move;
+    list->moves[list->count].score = 0;
     list->count++;
 }
 static void AddEnPassantMove( const S_BOARD *pos, int move, S_MOVELIST *list ) {
 
 
 	list->moves[list->count].move = move;
-    list->moves[list->count].score = move;
+    list->moves[list->count].score = 0;
     list->count++;
 }
 
 
 static void AddWhitePawnCapMove( const S_BOARD *pos, const int from, const int to, const int cap, S_MOVELIST *list ) {
-
-	ASSERT(PieceValidEmpty(cap));
-	ASSERT(SqOnBoard(from));
-	ASSERT(SqOnBoard(to));
-	ASSERT(CheckBoard(pos));
 
 	if(RanksBrd[from] == RANK_7) {
 		AddCaptureMove(pos, MOVE(from,to,cap,wQ,0), list);
@@ -46,10 +41,6 @@ static void AddWhitePawnCapMove( const S_BOARD *pos, const int from, const int t
 	}
 }
 static void AddWhitePawnMove( const S_BOARD *pos, const int from, const int to, S_MOVELIST *list ) {
-
-	ASSERT(SqOnBoard(from));
-	ASSERT(SqOnBoard(to));
-	ASSERT(CheckBoard(pos));
 
 	if(RanksBrd[from] == RANK_7) {
 		AddQuietMove(pos, MOVE(from,to,EMPTY,wQ,0), list);
@@ -70,9 +61,7 @@ void GenerateAllMoves(const S_BOARD *pos, S_MOVELIST *list){
 	int side = pos->side2move;
 	int sq = 0; int t_sq = 0;
 	int pceNum = 0;
-	int dir = 0;
-	int index = 0;
-	int pceIndex = 0;
+
 
     if(side == WHITE) {
 
@@ -119,4 +108,7 @@ void GenerateAllMoves(const S_BOARD *pos, S_MOVELIST *list){
 				}
 			}
 		}
+
+		
+	}
 }

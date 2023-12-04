@@ -1,33 +1,32 @@
 #include <iostream>
 using namespace std;
-#include <stdlib.h> //for time
+
 #include "defs.h"
-#include "init.cpp"
-#include "bitboard.cpp"
-#include "board.cpp"
-#include "data.cpp"
+
 #include <string> 
 
 
-int main() {
+
+int main(){
+
     AllInit();
     
-    string FEN1_S = "8/8/2R2pk1/P5p1/8/5PK1/r4BP1/5b2 b - - 5 52;";
-    
-    S_BOARD board[1];
+    string FEN1_S = "rnbqkb1r/pp1p1pPp/8/2p1pP2/1P1P4/7P/P1P1P3/RNBQKBNR w KQkq e6 0 1 ";
     char* FEN1 = FEN1_S.data();
+
+ 
+    printf( "\n" );
+    S_BOARD board[1];
+    
     
 
     ParseFen(FEN1, board);
     PrintBoard(board);
 
-    ASSERT(CheckBoard(board));
+    S_MOVELIST list[1];
 
-    int move = 0;
-    int from = 6; int to = 12;
-    int cap = wR; int prom = bR;
+    GenerateAllMoves(board, list);
 
-    move = ((from)| (to << 7) | (cap << 14) | (prom << 20));
+    PrintMoveList(list);
 
-    printf("\ndec:%d hex%x", move, move);
 }

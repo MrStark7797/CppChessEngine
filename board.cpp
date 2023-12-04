@@ -1,7 +1,7 @@
 #include <iostream>
 #include "defs.h"
 #include <string> 
-#include "hashkeys.cpp"
+
 int CheckBoard(const S_BOARD *pos) {
 	//function with asserts to trigger if there is a problem
 	//sets up tempory to hold infomation passing through the board filling up the tempory values, checking at the end to see if they are the same as the values we have on the board
@@ -75,7 +75,7 @@ int CheckBoard(const S_BOARD *pos) {
 	ASSERT(t_bigPce[WHITE]==pos->bigPiece[WHITE] && t_bigPce[BLACK]==pos->bigPiece[BLACK]);
 	
 	ASSERT(pos->side2move==WHITE || pos->side2move==BLACK);//side must be white or black
-	ASSERT(GeneratePosKey(pos)==pos->posKey); //when xoring the key we must check if the key is correct.
+	ASSERT(GenPosKey(pos)==pos->posKey); //when xoring the key we must check if the key is correct.
 
 	ASSERT(pos->enPas==NO_SQ || ( RanksBrd[pos->enPas]==RANK_6 && pos->side2move == WHITE)
 		 || ( RanksBrd[pos->enPas]==RANK_3 && pos->side2move == BLACK)); //Last move must have NO enpas square or must be rank 6 if its whites move or rank 3 if its blacks move
@@ -230,7 +230,7 @@ int ParseFen(char *fen, S_BOARD *pos) {
 		pos->enPas = FR2SQ(file,rank);
     }
 
-	pos->posKey = GeneratePosKey(pos); //generates hashkey
+	pos->posKey = GenPosKey(pos); //generates hashkey
 
 
 

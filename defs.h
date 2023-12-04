@@ -1,5 +1,6 @@
 #ifndef DEFS_H
-#define DEFS_H 
+
+#define DEFS_H
 
 
 #include <iostream>
@@ -17,7 +18,7 @@ printf("On %s ",__DATE__); \
 printf("At %s ",__TIME__); \
 printf("In File %s ",__FILE__); \
 printf("At Line %d\n",__LINE__); \
-exit(1);}
+}
 #endif
 
 
@@ -31,8 +32,8 @@ const int BRD_SQ_NUM = 120; //board will have 8x8 board where the game is played
 const int MAXGAMEMOVES = 2048;
 const int MAXPOSITIONMOVES =256;
 
-string START_FEN_STRING = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-const char* START_FEN = START_FEN_STRING.data(); 
+inline string START_FEN_STRING = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+inline const char* START_FEN = START_FEN_STRING.data(); 
 
 /*defines peices stored first letter shows colour, second letter shows peice type
 P = Pawn = 1
@@ -192,7 +193,7 @@ extern int PopBit(U64 *bb);
 extern int CountBits(U64 b);
 
 // hashkeys.cpp
-extern U64 GeneratePosKey(const S_BOARD *pos);
+extern U64 GenPosKey(const S_BOARD *pos);
 
 // board.cpp
 extern void ResetBoard(S_BOARD *pos);
@@ -209,6 +210,7 @@ extern int SqAttacked(const int sq, const int side, const S_BOARD *pos);
 
 extern char *PrMove(const int move);
 extern char *PrSq(const int sq);
+extern void PrintMoveList(const S_MOVELIST *list);
 //validate.cpp
 
 extern int SqOnBoard(const int sq);
@@ -217,4 +219,11 @@ extern int FileRankValid(const int fr);
 extern int PieceValidEmpty(const int pce);
 extern int PieceVAlid(const int pce);
 
-#endif // DEFS_H
+
+//movegen.cpp
+
+extern void GenerateAllMoves(const S_BOARD *pos, S_MOVELIST *list);
+
+
+#endif 
+// DEFS_H
