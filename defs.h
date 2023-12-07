@@ -27,7 +27,7 @@ typedef unsigned long long U64;
 
 const std::string NAME = "Slice 1.0";
 
-const int BRD_SQ_NUM = 120; //board will have 8x8 board where the game is played and 56 spare tiles to work as boarder squares
+#define BRD_SQ_NUM 120 //board will have 8x8 board where the game is played and 56 spare tiles to work as boarder squares
 
 const int MAXGAMEMOVES = 2048;
 const int MAXPOSITIONMOVES =256;

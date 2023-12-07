@@ -77,8 +77,8 @@ int CheckBoard(const S_BOARD *pos) {
 	ASSERT(pos->side2move==WHITE || pos->side2move==BLACK);//side must be white or black
 	ASSERT(GenPosKey(pos)==pos->posKey); //when xoring the key we must check if the key is correct.
 
-	ASSERT(pos->enPas==NO_SQ || ( RanksBrd[pos->enPas]==RANK_6 && pos->side2move == WHITE)
-		 || ( RanksBrd[pos->enPas]==RANK_3 && pos->side2move == BLACK)); //Last move must have NO enpas square or must be rank 6 if its whites move or rank 3 if its blacks move
+	ASSERT(pos->enPas==NO_SQ || ( RanksBrd[pos->enPas]==RANK_6 && pos->side2move == WHITE) || ( RanksBrd[pos->enPas]==RANK_3 && pos->side2move == BLACK));
+	//Last move must have NO enpas square or must be rank 6 if its whites move or rank 3 if its blacks move
 
 	ASSERT(pos->pieces[pos->KingSq[WHITE]] == wK);
 	ASSERT(pos->pieces[pos->KingSq[BLACK]] == bK);
