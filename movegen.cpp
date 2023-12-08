@@ -6,7 +6,43 @@
 #define SQOFFBOARD(sq) (FilesBrd[(sq)]==OFFBOARD)
 //Macro which is used to check if its offboard
 
+const int LoopSlidePce[8] = {
+ wB, wR, wQ, 0, bB, bR, bQ, 0
+};
+
+const int LoopNonSlidePce[6] = {
+ wN, wK, 0, bN, bK, 0
+};
+
+const int LoopSlideIndex[2] = { 0, 4 };
+const int LoopNonSlideIndex[2] = { 0, 3 };
+
+
+const int PceDir[13][8] = {
+	{ 0, 0, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0 },
+	{ -8, -19,	-21, -12, 8, 19, 21, 12 },
+	{ -9, -11, 11, 9, 0, 0, 0, 0 },
+	{ -1, -10,	1, 10, 0, 0, 0, 0 },
+	{ -1, -10,	1, 10, -9, -11, 11, 9 },
+	{ -1, -10,	1, 10, -9, -11, 11, 9 },
+	{ 0, 0, 0, 0, 0, 0, 0 },
+	{ -8, -19,	-21, -12, 8, 19, 21, 12 },
+	{ -9, -11, 11, 9, 0, 0, 0, 0 },
+	{ -1, -10,	1, 10, 0, 0, 0, 0 },
+	{ -1, -10,	1, 10, -9, -11, 11, 9 },
+	{ -1, -10,	1, 10, -9, -11, 11, 9 }
+};
+
+const int NumDir[13] = {
+ 0, 0, 8, 4, 4, 8, 8, 0, 8, 4, 4, 8, 8
+};
+
 static void AddQuietMove( const S_BOARD *pos, int move, S_MOVELIST *list ) {
+
+	ASSERT(SqOnBoard(FROMSQ(move)));
+	ASSERT(SqOnBoard(TOSQ(move)));
+	ASSERT(CheckBoard(pos));
 
 
 	list->moves[list->count].move = move;
@@ -15,6 +51,10 @@ static void AddQuietMove( const S_BOARD *pos, int move, S_MOVELIST *list ) {
 }
 static void AddCaptureMove( const S_BOARD *pos, int move, S_MOVELIST *list ) {
 
+	ASSERT(SqOnBoard(FROMSQ(move)));
+	ASSERT(SqOnBoard(TOSQ(move)));
+	ASSERT(PieceValid(CAPTURED(move)));
+	ASSERT(CheckBoard(pos));
 
 	list->moves[list->count].move = move;
     list->moves[list->count].score = 0;
@@ -22,6 +62,10 @@ static void AddCaptureMove( const S_BOARD *pos, int move, S_MOVELIST *list ) {
 }
 static void AddEnPassantMove( const S_BOARD *pos, int move, S_MOVELIST *list ) {
 
+	ASSERT(SqOnBoard(FROMSQ(move)));
+	ASSERT(SqOnBoard(TOSQ(move)));
+	ASSERT(CheckBoard(pos));
+	ASSERT((RanksBrd[TOSQ(move)]==RANK_6 && pos->side2move == WHITE) || (RanksBrd[TOSQ(move)]==RANK_3 && pos->side2move == BLACK));
 
 	list->moves[list->count].move = move;
     list->moves[list->count].score = 0;
@@ -30,7 +74,10 @@ static void AddEnPassantMove( const S_BOARD *pos, int move, S_MOVELIST *list ) {
 
 
 static void AddWhitePawnCapMove( const S_BOARD *pos, const int from, const int to, const int cap, S_MOVELIST *list ) {
-
+	ASSERT(PieceValidEmpty(cap));
+	ASSERT(SqOnBoard(from));
+	ASSERT(SqOnBoard(to));
+	ASSERT(CheckBoard(pos));
 	if(RanksBrd[from] == RANK_7) {
 		AddCaptureMove(pos, MOVE(from,to,cap,wQ,0), list);
 		AddCaptureMove(pos, MOVE(from,to,cap,wR,0), list);
@@ -191,4 +238,5 @@ void GenerateAllMoves(const S_BOARD *pos, S_MOVELIST *list){
 			}
 		}
 	}
+
 }
