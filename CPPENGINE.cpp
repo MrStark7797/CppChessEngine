@@ -11,7 +11,7 @@ int main(){
 
     AllInit();
     
-    string FEN1_S = "4k3/8/3q4/8/8/3Q4/5K2/8 w - - 0 1";
+    string FEN1_S = "4k3/8/3r4/8/8/3R4/5K2/8 w - - 0 1";
     char* FEN1 = FEN1_S.data();
 
  
