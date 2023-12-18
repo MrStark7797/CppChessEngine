@@ -142,7 +142,9 @@ void GenerateAllMoves(const S_BOARD *pos, S_MOVELIST *list){
 	int side = pos->side2move;
 	int sq = 0; int t_sq = 0;
 	int pceNum = 0;
-
+	int dir = 0; //The direction of the piece
+	int index = 0;
+	int pceIndex = 0;
 
     if(side == WHITE) {
 
@@ -238,5 +240,70 @@ void GenerateAllMoves(const S_BOARD *pos, S_MOVELIST *list){
 			}
 		}
 	}
+	//sliding peices loop
+	pceIndex = LoopSlideIndex[side];
+	pce = LoopSlidePce[pceIndex++];
+	while( pce != 0) {
+		ASSERT(PieceValid(pce));
+
+		for(pceNum = 0; pceNum < pos->pieceNum[pce]; ++pceNum) {
+			sq = pos->pList[pce][pceNum];
+			ASSERT(SqOnBoard(sq));
+
+			for(index = 0; index < NumDir[pce]; ++index) {
+				dir = PceDir[pce][index];
+				t_sq = sq + dir;
+
+				while(!SQOFFBOARD(t_sq)) {
+					// BLACK ^ 1 == WHITE       WHITE ^ 1 == BLACK
+					if(pos->pieces[t_sq] != EMPTY) {
+						if( PieceCol[pos->pieces[t_sq]] == (side ^ 1)) {
+							AddCaptureMove(pos, MOVE(sq, t_sq, pos->pieces[t_sq], EMPTY, 0), list);
+						}
+						break;
+					}
+					AddQuietMove(pos, MOVE(sq, t_sq, EMPTY, EMPTY, 0), list);
+					t_sq += dir;
+				}
+			}
+		}
+
+		pce = LoopSlidePce[pceIndex++];
+	}
+
+	/* Loop for non slide */
+	pceIndex = LoopNonSlideIndex[side];
+	pce = LoopNonSlidePce[pceIndex++];
+
+	while( pce != 0) {
+		ASSERT(PieceValid(pce));
+
+		for(pceNum = 0; pceNum < pos->pieceNum[pce]; ++pceNum) {
+			sq = pos->pList[pce][pceNum];
+			ASSERT(SqOnBoard(sq));
+
+			for(index = 0; index < NumDir[pce]; ++index) {
+				dir = PceDir[pce][index];
+				t_sq = sq + dir;
+
+				if(SQOFFBOARD(t_sq)) {
+					continue;
+				}
+
+				// BLACK ^ 1 == WHITE       WHITE ^ 1 == BLACK
+				if(pos->pieces[t_sq] != EMPTY) {
+					if( PieceCol[pos->pieces[t_sq]] == (side ^ 1)) {
+						AddCaptureMove(pos, MOVE(sq, t_sq, pos->pieces[t_sq], EMPTY, 0), list);
+					}
+					continue;
+				}
+				AddQuietMove(pos, MOVE(sq, t_sq, EMPTY, EMPTY, 0), list);
+			}
+		}
+
+		pce = LoopNonSlidePce[pceIndex++];
+	}
+
+
 
 }

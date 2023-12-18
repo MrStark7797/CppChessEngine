@@ -11,7 +11,7 @@ int main(){
 
     AllInit();
     
-    string FEN1_S = "rnbqkb1r/pp1p1pPp/8/2p1pP2/1P1P4/7P/P1P1P3/RNBQKBNR w KQkq e6 0 1 ";
+    string FEN1_S = "4k3/8/3q4/8/8/3Q4/5K2/8 w - - 0 1";
     char* FEN1 = FEN1_S.data();
 
  
@@ -21,7 +21,6 @@ int main(){
     
 
     ParseFen(FEN1, board);
-    PrintBoard(board);
 
     S_MOVELIST list[1];
 
