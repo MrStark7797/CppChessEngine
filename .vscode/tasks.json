@@ -15,7 +15,7 @@
                 "init.cpp",
                 "io.cpp",
                 "bitboard.cpp",
-
+                "makemove.cpp",
                 "movegen.cpp",
                 "validate.cpp",
                 "board.cpp",
