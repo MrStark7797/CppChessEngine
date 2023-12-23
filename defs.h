@@ -31,6 +31,7 @@ const std::string NAME = "Slice 1.0";
 
 const int MAXGAMEMOVES = 2048;
 const int MAXPOSITIONMOVES =256;
+const int MAXDEPTH = 64;
 
 inline string START_FEN_STRING = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 inline const char* START_FEN = START_FEN_STRING.data(); 
@@ -82,7 +83,7 @@ typedef struct{
 } S_MOVELIST;
 typedef struct{
     int move;
-    int castlePerml;
+    int castlePerm;
     int enPas;
     int fiftyMove;
     U64 posKey;

@@ -134,3 +134,107 @@ static void MovePiece(const int from, const int to, S_BOARD *pos) {
 	}
 	ASSERT(t_PieceNum);
 }
+int MakeMove(S_BOARD *pos, int move) {
+
+	ASSERT(CheckBoard(pos));
+	
+	int from = FROMSQ(move);
+    int to = TOSQ(move);
+    int side = pos->side2move;
+	
+	ASSERT(SqOnBoard(from));
+    ASSERT(SqOnBoard(to));
+    ASSERT(SideValid(side));
+    ASSERT(PieceValid(pos->pieces[from]));
+    if(move & MFLAGEP) {
+        if(side == WHITE) {
+            ClearPiece(to-10,pos);
+        } else {
+            ClearPiece(to+10,pos);
+        }
+    } else if (move & MFLAGCA) {
+        switch(to) {
+            case C1:
+                MovePiece(A1, D1, pos);
+			break;
+            case C8:
+                MovePiece(A8, D8, pos);
+			break;
+            case G1:
+                MovePiece(H1, F1, pos);
+			break;
+            case G8:
+                MovePiece(H8, F8, pos);
+			break;
+            default: ASSERT(FALSE); break;
+        }
+    }	
+	if(pos->enPas != NO_SQ) HASH_EP;
+    HASH_CA;
+	
+	pos->history[pos->hisPly].move = move;
+    pos->history[pos->hisPly].fiftyMove = pos->fiftyMove;
+    pos->history[pos->hisPly].enPas = pos->enPas;
+    pos->history[pos->hisPly].castlePerm = pos->castlePerm;
+
+    pos->castlePerm &= CastlePerm[from];
+    pos->castlePerm &= CastlePerm[to];
+    pos->enPas = NO_SQ;
+
+	HASH_CA;
+	
+	int captured = CAPTURED(move);
+    pos->fiftyMove++;
+	
+	if(captured != EMPTY) {
+        ASSERT(PieceValid(captured));
+        ClearPiece(to, pos);
+        pos->fiftyMove = 0;
+    }
+	
+	pos->hisPly++;
+	pos->ply++;
+	
+	ASSERT(pos->hisPly >= 0 && pos->hisPly < MAXGAMEMOVES);
+	ASSERT(pos->ply >= 0 && pos->ply < MAXDEPTH);
+	
+	if(PiecePawn[pos->pieces[from]]) {
+        pos->fiftyMove = 0;
+        if(move & MFLAGPS) {
+            if(side==WHITE) {
+                pos->enPas=from+10;
+                ASSERT(RanksBrd[pos->enPas]==RANK_3);
+            } else {
+                pos->enPas=from-10;
+                ASSERT(RanksBrd[pos->enPas]==RANK_6);
+            }
+            HASH_EP;
+        }
+    }
+	
+	MovePiece(from, to, pos);
+	
+	int prPce = PROMOTED(move);
+    if(prPce != EMPTY)   {
+        ASSERT(PieceValid(prPce) && !PiecePawn[prPce]);
+        ClearPiece(to, pos);
+        AddPiece(to, pos, prPce);
+    }
+	
+	if(PieceKing[pos->pieces[to]]) {
+        pos->KingSq[pos->side2move] = to;
+    }
+	
+	pos->side2move ^= 1;
+    HASH_SIDE;
+
+    ASSERT(CheckBoard(pos));
+    	
+	if(SqAttacked(pos->KingSq[side],pos->side2move,pos))  {
+        //TakeMove(pos);
+        return FALSE;
+    }
+
+	return TRUE;
+	
+}
