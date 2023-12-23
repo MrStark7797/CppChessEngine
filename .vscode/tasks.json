@@ -19,6 +19,7 @@
                 "movegen.cpp",
                 "validate.cpp",
                 "board.cpp",
+                "perft.cpp",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],
