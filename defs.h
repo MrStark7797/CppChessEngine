@@ -225,6 +225,11 @@ extern int PieceValid(const int pce);
 
 extern void GenerateAllMoves(const S_BOARD *pos, S_MOVELIST *list);
 
+//makemove.cpp
+extern int MakeMove(S_BOARD *pos, int move);
+extern void TakeMove(S_BOARD *pos);
+//perft.cpp
 
+extern void PerftTest(int depth, S_BOARD *pos);
 #endif 
 // DEFS_H

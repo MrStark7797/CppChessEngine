@@ -11,21 +11,17 @@ int main(){
 
     AllInit();
     
-    string FEN1_S = "4k3/8/3p4/8/8/3N4/5K2/8 w - - 0 1";
+    string FEN1_S = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     char* FEN1 = FEN1_S.data();
-
- 
-    printf( "\n" );
+    printf("\n");
     S_BOARD board[1];
-    
-    
-
+    S_MOVELIST list[1];
     ParseFen(FEN1, board);
 
-    S_MOVELIST list[1];
-
-    GenerateAllMoves(board, list);
-
-    PrintMoveList(list);
-
+    //Depth 1
+    PerftTest(3, board);
+    //Depth 2
+    //PerftTest(2, board);
+    //Depth 3
+    //PerftTest(3, board);
 }
