@@ -18,10 +18,23 @@ int main(){
     S_MOVELIST list[1];
     ParseFen(FEN1, board);
 
-    //Depth 1
-    PerftTest(3, board);
-    //Depth 2
-    //PerftTest(2, board);
-    //Depth 3
-    //PerftTest(3, board);
+    char inputmove[6];
+
+    while(TRUE){
+        PrintBoard(board);
+        printf("\n\n\nEnter Move >");
+        fgets(inputmove, 6, stdin);
+
+        fflush(stdin);
+
+        if(inputmove[0]=='q'){
+            break;
+        }else if(inputmove[0]=='t'){
+            TakeMove(board);
+            continue;
+        } else{
+            ParseMove(inputmove, board);
+            
+        }
+    }
 }
