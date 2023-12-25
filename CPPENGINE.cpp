@@ -19,7 +19,7 @@ int main(){
     ParseFen(FEN1, board);
 
     char inputmove[6];
-
+    int Move = NOMOVE;
     while(TRUE){
         PrintBoard(board);
         printf("\n\n\nEnter Move >");
@@ -31,9 +31,12 @@ int main(){
             break;
         }else if(inputmove[0]=='t'){
             TakeMove(board);
-            continue;
+            
         } else{
-            ParseMove(inputmove, board);
+            Move = ParseMove(inputmove, board);
+            if(Move !=NOMOVE){
+                MakeMove(board,Move);
+            }
             
         }
     }

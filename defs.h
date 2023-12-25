@@ -233,5 +233,8 @@ extern void TakeMove(S_BOARD *pos);
 //perft.cpp
 
 extern void PerftTest(int depth, S_BOARD *pos);
+//search.cpp
+extern int IsRepetition(const S_BOARD *pos);
+
 #endif 
 // DEFS_H
