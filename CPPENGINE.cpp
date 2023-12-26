@@ -20,24 +20,40 @@ int main(){
 
     char inputmove[6];
     int Move = NOMOVE;
+    int Pvnum = 0;
+    int Max = 0;
+    
     while(TRUE){
         PrintBoard(board);
         printf("\n\n\nEnter Move >");
         fgets(inputmove, 6, stdin);
 
-        fflush(stdin);
+        
 
         if(inputmove[0]=='q'){
             break;
         }else if(inputmove[0]=='t'){
             TakeMove(board);
+        }else if(inputmove[0]=='g'){
+            Max = GetPvLine(4, board);
+            printf("Pv line of %d Moves: ", Max);
+            for(Pvnum = 0; Pvnum < Max; ++ Pvnum){
+                Move = board->PvArray[Pvnum];
+                printf(" %s", PrMove(Move));
+            }
             
+            
+           
         } else{
             Move = ParseMove(inputmove, board);
             if(Move !=NOMOVE){
+                StorePvMove(board, Move);//theoretical
                 MakeMove(board,Move);
+            }else{
+                printf("Move Not Parsed:%s\n",inputmove);
             }
             
         }
     }
+    fflush(stdin);
 }

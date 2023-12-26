@@ -267,6 +267,7 @@ extern int GetTimeMs();
 extern void InitPvTable(S_PVTABLE *table);
 extern int ProbePvTable(const S_BOARD *pos);
 extern void StorePvMove(const S_BOARD *pos, const int move);
+extern int GetPvLine(const int depth, S_BOARD *pos);
 
 #endif 
 // DEFS_H
