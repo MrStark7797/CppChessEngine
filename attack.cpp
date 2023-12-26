@@ -1,5 +1,5 @@
 #include <iostream>
-using namespace std;
+
 #include "defs.h"
 
 const int KnDir[8] = { -8, -19,	-21, -12, 8, 19, 21, 12 }; //2 rank away and 1 row or the otherway around

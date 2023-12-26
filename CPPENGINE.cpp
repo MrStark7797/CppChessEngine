@@ -1,5 +1,5 @@
 #include <iostream>
-using namespace std;
+
 
 #include "defs.h"
 
@@ -11,7 +11,7 @@ int main(){
 
     AllInit();
     
-    string FEN1_S = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    std::string FEN1_S = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     char* FEN1 = FEN1_S.data();
     printf("\n");
     S_BOARD board[1];

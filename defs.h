@@ -4,7 +4,7 @@
 
 
 #include <iostream>
-using namespace std;
+
 
 #define DEBUG
 
@@ -33,7 +33,7 @@ const int MAXGAMEMOVES = 2048;
 const int MAXPOSITIONMOVES =256;
 const int MAXDEPTH = 64;
 
-inline string START_FEN_STRING = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+inline std::string START_FEN_STRING = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 inline const char* START_FEN = START_FEN_STRING.data(); 
 
 /*defines peices stored first letter shows colour, second letter shows peice type
@@ -68,7 +68,10 @@ enum {
     A8 = 91, B8, C8, D8, E8, F8, G8, H8, NO_SQ, OFFBOARD
 };
 
-enum {FALSE, TRUE};
+#undef TRUE
+#undef FALSE
+
+enum {FALSE, TRUE };
 
 //Represented by 4 bits bit one tells us if white can castle kingside and so on
 enum { WKCA = 1, WQCA = 2, BKCA = 4, BQCA = 8};

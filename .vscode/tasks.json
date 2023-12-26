@@ -8,6 +8,7 @@
                 "-fdiagnostics-color=always",
                 "-g",
                 "CPPENGINE.cpp",
+                "misc.cpp",
                 "hashkeys.cpp",
                 "data.cpp",
                 "attack.cpp",
@@ -20,7 +21,7 @@
                 "board.cpp",
                 "perft.cpp",
                 "search.cpp",
-                "misc.cpp",
+                
                 "pvtable.cpp",
                 
                 "-o",

@@ -19,7 +19,7 @@ U64 GenPosKey(const S_BOARD *pos) {
 	
 	if(pos->side2move == WHITE) {
 		finalKey ^= SideKey;
-		cout << "0";
+		
 		
 	} //if white move hash in sidekey
 	
@@ -27,7 +27,7 @@ U64 GenPosKey(const S_BOARD *pos) {
 		ASSERT(pos->enPas>=0 && pos->enPas<BRD_SQ_NUM);
 		ASSERT(SqOnBoard(pos->enPas));
 		ASSERT(RanksBrd[pos->enPas] == RANK_3 || RanksBrd[pos->enPas] == RANK_6);
-		cout << RanksBrd[pos->enPas] << "\n";
+		
 		finalKey ^= PieceKeys[EMPTY][pos->enPas];
 	} //If a pawn is moved forward 2 squares the enPasaunt square is set generates a square for the square and indexes it by empty or 0, if this is the case we hash it in
 	
