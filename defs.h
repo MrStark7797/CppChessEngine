@@ -81,6 +81,27 @@ typedef struct{
     S_MOVE moves[MAXPOSITIONMOVES]; //contains array of S_MOVE structures upt to 256 moves
     int count;
 } S_MOVELIST;
+
+enum {  HFNONE, HFALPHA, HFBETA, HFEXACT};
+
+typedef struct {
+	U64 posKey;
+	int move;
+	int score;
+	int depth;
+	int flags;
+} S_PVENTRY;
+
+typedef struct {
+	S_PVENTRY *pTable;
+	int numEntries;
+	int newWrite;
+	int overWrite;
+	int hit;
+	int cut;
+} S_PVTABLE;
+
+
 typedef struct{
     int move;
     int castlePerm;
@@ -116,6 +137,10 @@ typedef struct {
     S_UNDO history[MAXGAMEMOVES];
     //peice list
     int pList[13][10];
+
+    S_PVTABLE PvTable[1];
+    
+	int PvArray[MAXDEPTH];
 
 } S_BOARD;
 
@@ -226,6 +251,7 @@ extern int PieceValid(const int pce);
 //movegen.cpp
 
 extern void GenerateAllMoves(const S_BOARD *pos, S_MOVELIST *list);
+extern int MoveExists(S_BOARD *pos, const int move);
 
 //makemove.cpp
 extern int MakeMove(S_BOARD *pos, int move);
@@ -235,6 +261,12 @@ extern void TakeMove(S_BOARD *pos);
 extern void PerftTest(int depth, S_BOARD *pos);
 //search.cpp
 extern int IsRepetition(const S_BOARD *pos);
+//misc.cpp
+extern int GetTimeMs();
+//pvtable.cpp
+extern void InitPvTable(S_PVTABLE *table);
+extern int ProbePvTable(const S_BOARD *pos);
+extern void StorePvMove(const S_BOARD *pos, const int move);
 
 #endif 
 // DEFS_H
