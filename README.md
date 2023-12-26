@@ -15,4 +15,4 @@ Finally Finished move gen (for time being),
 
 </ul>
 
-May add move features (time dependant)
+May add more features (time dependant)
