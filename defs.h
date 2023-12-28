@@ -33,8 +33,13 @@ const int MAXGAMEMOVES = 2048;
 const int MAXPOSITIONMOVES =256;
 const int MAXDEPTH = 64;
 
+
 inline std::string START_FEN_STRING = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 inline const char* START_FEN = START_FEN_STRING.data(); 
+
+
+#define INFINITE 30000
+#define ISMATE (INFINITE - MAXDEPTH)
 
 /*defines peices stored first letter shows colour, second letter shows peice type
 P = Pawn = 1
@@ -123,8 +128,8 @@ typedef struct {
     int enPas;
     int fiftyMove;
 
-    int ply;
-    int hisPly;
+    int ply; //half moves in current search
+    int hisPly; // half moves in history of the game
 
     int castlePerm;
 
@@ -299,6 +304,7 @@ extern void InitPvTable(S_PVTABLE *table);
 extern int ProbePvTable(const S_BOARD *pos);
 extern void StorePvMove(const S_BOARD *pos, const int move);
 extern int GetPvLine(const int depth, S_BOARD *pos);
+extern void ClearPvTable(S_PVTABLE *table);
 //evaluate.cpp
 extern int EvalPosition(const S_BOARD *pos);
 
