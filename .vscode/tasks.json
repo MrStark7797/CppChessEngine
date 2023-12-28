@@ -21,6 +21,7 @@
                 "board.cpp",
                 "perft.cpp",
                 "search.cpp",
+                "evaluate.cpp",
                 
                 "pvtable.cpp",
                 

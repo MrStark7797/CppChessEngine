@@ -144,8 +144,32 @@ typedef struct {
     S_PVTABLE PvTable[1];
     
 	int PvArray[MAXDEPTH];
+    int searchHistory[13][BRD_SQ_NUM];
+	int searchKillers[2][MAXDEPTH];//2 moves that cause a non capture which beat beta.
 
 } S_BOARD;
+typedef struct {
+
+	int starttime;
+	int stoptime;
+	int depth;
+	int timeset;
+	int movestogo;
+    int infinite;
+
+	long nodes;//count of positioins engine visists in the search tree.
+
+	int quit;//clean up and exit
+	int stopped; //bacjs oout of search using result f previous iteration.
+
+	float fh;
+	float fhf;
+	int nullCut;
+
+	int GAME_MODE;
+	int POST_THINKING;
+
+} S_SEARCHINFO;
 
 // GAME MOVE
 
@@ -181,7 +205,8 @@ typedef struct {
 #define IsRQ(p) (PieceRookQueen[(p)])
 #define IsKn(p) (PieceKnight[(p)])
 #define IsKi(p) (PieceKing[(p)])
-
+//macro to flip boards around.
+#define MIRROR64(sq) (Mirror64[(sq)])
 
 
 //GLOBALS
@@ -212,6 +237,8 @@ extern int PieceKing[13];
 extern int PieceRookQueen[13];
 extern int PieceBishopQueen[13];
 extern int PieceSlides[13];
+
+extern int Mirror64[64];
 //FUNCTIONS
 //init.cpp
 extern void AllInit();
@@ -264,6 +291,7 @@ extern void TakeMove(S_BOARD *pos);
 extern void PerftTest(int depth, S_BOARD *pos);
 //search.cpp
 extern int IsRepetition(const S_BOARD *pos);
+extern void SearchPosition(S_BOARD *pos, S_SEARCHINFO *info);
 //misc.cpp
 extern int GetTimeMs();
 //pvtable.cpp
@@ -271,6 +299,8 @@ extern void InitPvTable(S_PVTABLE *table);
 extern int ProbePvTable(const S_BOARD *pos);
 extern void StorePvMove(const S_BOARD *pos, const int move);
 extern int GetPvLine(const int depth, S_BOARD *pos);
+//evaluate.cpp
+extern int EvalPosition(const S_BOARD *pos);
 
 #endif 
 // DEFS_H
