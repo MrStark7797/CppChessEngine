@@ -6,7 +6,7 @@
 #include <iostream>
 
 
-#define DEBUG
+//#define DEBUG
 
 #ifndef DEBUG
 #define ASSERT(n)
@@ -237,7 +237,7 @@ extern int PieceRookQueen[13];
 extern int PieceBishopQueen[13];
 extern int PieceSlides[13];
 
-extern int Mirror64[64];
+extern const int Mirror64[64];
 //FUNCTIONS
 //init.cpp
 extern void AllInit();
@@ -280,8 +280,9 @@ extern int PieceValid(const int pce);
 //movegen.cpp
 
 extern void GenerateAllMoves(const S_BOARD *pos, S_MOVELIST *list);
+extern void GenerateAllCaps(const S_BOARD *pos, S_MOVELIST *list);
 extern int MoveExists(S_BOARD *pos, const int move);
-extern int InitMvvLva();
+extern void InitMvvLva();
 
 //makemove.cpp
 extern int MakeMove(S_BOARD *pos, int move);

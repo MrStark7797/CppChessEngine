@@ -68,6 +68,7 @@ const int KingO[64] = {
 };
 
 
+
 int EvalPosition(const S_BOARD *pos){
     ASSERT(CheckBoard(pos));
 

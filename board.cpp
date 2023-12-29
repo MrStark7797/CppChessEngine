@@ -279,7 +279,7 @@ void ResetBoard(S_BOARD *pos) {
 
 	pos->posKey = 0ULL;
 
-	InitPvTable(pos->PvTable);
+	
     //resets all colours to both colors and all other permisions and rules to 0. 
     //sets colours to both so we can assert if a peice is defined as both colours.
 } 

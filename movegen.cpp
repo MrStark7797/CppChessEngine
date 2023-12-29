@@ -80,7 +80,14 @@ static void AddQuietMove( const S_BOARD *pos, int move, S_MOVELIST *list ) {
 
 
 	list->moves[list->count].move = move;
-    list->moves[list->count].score = 0;
+    if(pos->searchKillers[0][pos->ply] == move) {
+		list->moves[list->count].score = 900000;
+	} else if(pos->searchKillers[1][pos->ply] == move) {
+		list->moves[list->count].score = 800000;
+	} else {
+		list->moves[list->count].score = pos->searchHistory[pos->pieces[FROMSQ(move)]][TOSQ(move)];
+	}
+
     list->count++;
 }
 static void AddCaptureMove( const S_BOARD *pos, int move, S_MOVELIST *list ) {
@@ -91,7 +98,7 @@ static void AddCaptureMove( const S_BOARD *pos, int move, S_MOVELIST *list ) {
 	ASSERT(CheckBoard(pos));
 
 	list->moves[list->count].move = move;
-    list->moves[list->count].score = MvvLvaScores[CAPTURED(move)][pos->pieces[FROMSQ(move)]];
+    list->moves[list->count].score = MvvLvaScores[CAPTURED(move)][pos->pieces[FROMSQ(move)]] + 1000000;
     list->count++;
 }
 static void AddEnPassantMove( const S_BOARD *pos, int move, S_MOVELIST *list ) {
@@ -102,7 +109,7 @@ static void AddEnPassantMove( const S_BOARD *pos, int move, S_MOVELIST *list ) {
 	ASSERT((RanksBrd[TOSQ(move)]==RANK_6 && pos->side2move == WHITE) || (RanksBrd[TOSQ(move)]==RANK_3 && pos->side2move == BLACK));
 
 	list->moves[list->count].move = move;
-    list->moves[list->count].score = 0;
+    list->moves[list->count].score = 105 + 1000000;
     list->count++;
 }
 
@@ -340,4 +347,128 @@ void GenerateAllMoves(const S_BOARD *pos, S_MOVELIST *list){
 
 
 
+}
+void GenerateAllCaps(const S_BOARD *pos, S_MOVELIST *list) {
+
+	ASSERT(CheckBoard(pos));
+
+	list->count = 0;
+
+	int pce = EMPTY;
+	int side = pos->side2move;
+	int sq = 0; int t_sq = 0;
+	int pceNum = 0;
+	int dir = 0;
+	int index = 0;
+	int pceIndex = 0;
+
+	if(side == WHITE) {
+
+		for(pceNum = 0; pceNum < pos->pieceNum[wP]; ++pceNum) {
+			sq = pos->pList[wP][pceNum];
+			ASSERT(SqOnBoard(sq));
+
+			if(!SQOFFBOARD(sq + 9) && PieceCol[pos->pieces[sq + 9]] == BLACK) {
+				AddWhitePawnCapMove(pos, sq, sq+9, pos->pieces[sq + 9], list);
+			}
+			if(!SQOFFBOARD(sq + 11) && PieceCol[pos->pieces[sq + 11]] == BLACK) {
+				AddWhitePawnCapMove(pos, sq, sq+11, pos->pieces[sq + 11], list);
+			}
+
+			if(pos->enPas != NO_SQ) {
+				if(sq + 9 == pos->enPas) {
+					AddEnPassantMove(pos, MOVE(sq,sq + 9,EMPTY,EMPTY,MFLAGEP), list);
+				}
+				if(sq + 11 == pos->enPas) {
+					AddEnPassantMove(pos, MOVE(sq,sq + 11,EMPTY,EMPTY,MFLAGEP), list);
+				}
+			}
+		}
+
+	} else {
+
+		for(pceNum = 0; pceNum < pos->pieceNum[bP]; ++pceNum) {
+			sq = pos->pList[bP][pceNum];
+			ASSERT(SqOnBoard(sq));
+
+			if(!SQOFFBOARD(sq - 9) && PieceCol[pos->pieces[sq - 9]] == WHITE) {
+				AddBlackPawnCapMove(pos, sq, sq-9, pos->pieces[sq - 9], list);
+			}
+
+			if(!SQOFFBOARD(sq - 11) && PieceCol[pos->pieces[sq - 11]] == WHITE) {
+				AddBlackPawnCapMove(pos, sq, sq-11, pos->pieces[sq - 11], list);
+			}
+			if(pos->enPas != NO_SQ) {
+				if(sq - 9 == pos->enPas) {
+					AddEnPassantMove(pos, MOVE(sq,sq - 9,EMPTY,EMPTY,MFLAGEP), list);
+				}
+				if(sq - 11 == pos->enPas) {
+					AddEnPassantMove(pos, MOVE(sq,sq - 11,EMPTY,EMPTY,MFLAGEP), list);
+				}
+			}
+		}
+	}
+
+	/* Loop for slide pieces */
+	pceIndex = LoopSlideIndex[side];
+	pce = LoopSlidePce[pceIndex++];
+	while( pce != 0) {
+		ASSERT(PieceValid(pce));
+
+		for(pceNum = 0; pceNum < pos->pieceNum[pce]; ++pceNum) {
+			sq = pos->pList[pce][pceNum];
+			ASSERT(SqOnBoard(sq));
+
+			for(index = 0; index < NumDir[pce]; ++index) {
+				dir = PceDir[pce][index];
+				t_sq = sq + dir;
+
+				while(!SQOFFBOARD(t_sq)) {
+					// BLACK ^ 1 == WHITE       WHITE ^ 1 == BLACK
+					if(pos->pieces[t_sq] != EMPTY) {
+						if( PieceCol[pos->pieces[t_sq]] == (side ^ 1)) {
+							AddCaptureMove(pos, MOVE(sq, t_sq, pos->pieces[t_sq], EMPTY, 0), list);
+						}
+						break;
+					}
+					t_sq += dir;
+				}
+			}
+		}
+
+		pce = LoopSlidePce[pceIndex++];
+	}
+
+	/* Loop for non slide */
+	pceIndex = LoopNonSlideIndex[side];
+	pce = LoopNonSlidePce[pceIndex++];
+
+	while( pce != 0) {
+		ASSERT(PieceValid(pce));
+
+		for(pceNum = 0; pceNum < pos->pieceNum[pce]; ++pceNum) {
+			sq = pos->pList[pce][pceNum];
+			ASSERT(SqOnBoard(sq));
+
+			for(index = 0; index < NumDir[pce]; ++index) {
+				dir = PceDir[pce][index];
+				t_sq = sq + dir;
+
+				if(SQOFFBOARD(t_sq)) {
+					continue;
+				}
+
+				// BLACK ^ 1 == WHITE       WHITE ^ 1 == BLACK
+				if(pos->pieces[t_sq] != EMPTY) {
+					if( PieceCol[pos->pieces[t_sq]] == (side ^ 1)) {
+						AddCaptureMove(pos, MOVE(sq, t_sq, pos->pieces[t_sq], EMPTY, 0), list);
+					}
+					continue;
+				}
+			}
+		}
+
+		pce = LoopNonSlidePce[pceIndex++];
+	}
+    ASSERT(MoveListOk(list,pos));
 }

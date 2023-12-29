@@ -11,11 +11,11 @@ int main(){
 
     AllInit();
     
-    std::string FEN1_S = "R7/6k1/4p3/R5pp/4P1P1/5n1K/1r6/8 b - - 0 37";
+    std::string FEN1_S = "r1b1k2r/ppppnppp/2n2q2/2b5/3NP3/2P1N3/PP3PPP/RN1QKB1R w KQkq - 0 1";
     char* FEN1 = FEN1_S.data();
     printf("\n");
     S_BOARD board[1]; 
-
+    InitPvTable(board->PvTable);
     S_MOVELIST list[1];
     ParseFen(FEN1, board);
 
@@ -34,24 +34,33 @@ int main(){
 
         if(inputmove[0]=='q'){
             break;
-        }else if(inputmove[0]=='t'){
-            TakeMove(board);
+        }else if(inputmove[0]=='p'){
+            
+
+            while(TRUE){
+                std::string FEN2_S = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";
+                char* FEN2 = FEN2_S.data();
+                int inputdepth;
+                S_BOARD perftboard[1]; 
+                S_MOVELIST perftlist[1];
+                ParseFen(FEN2, perftboard);
+                printf("\n\n\nEnter Depth >");
+                std::cin >> inputdepth;
+                if (inputdepth < 0)
+                {
+                    break;
+                }else{
+                    PerftTest(inputdepth, perftboard);
+                }
+                
+            }
+            
         }else if(inputmove[0]=='s'){
             int start = GetTimeMs();
-            info->depth=4;
+            info->depth=9;
             printf("Max Depth Searched > %d\n", info->depth);
             SearchPosition(board, info);
             printf( "Solves In %d ms",(GetTimeMs() - start));
-        }else if(inputmove[0]=='f'){
-            
-            std::string FENINPUT_S;
-            printf("\n\n\nEnter FEN >");
-            fgets(inputmove, 6, stdin);
-            char* FENINPUT = FENINPUT_S.data();
-            
-           
-            
-           
         } else{
             Move = ParseMove(inputmove, board);
             if(Move !=NOMOVE){
