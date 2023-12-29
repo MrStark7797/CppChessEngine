@@ -164,6 +164,6 @@ int EvalPosition(const S_BOARD *pos){
 		
 	
 
-
-    return 0;
+	}
+    return score;
 }

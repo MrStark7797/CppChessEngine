@@ -97,16 +97,13 @@ typedef struct {
 	int move;
 	int score;
 	int depth;
-	int flags;
+
 } S_PVENTRY;
 
 typedef struct {
 	S_PVENTRY *pTable;
 	int numEntries;
-	int newWrite;
-	int overWrite;
-	int hit;
-	int cut;
+
 } S_PVTABLE;
 
 
@@ -158,6 +155,7 @@ typedef struct {
 	int starttime;
 	int stoptime;
 	int depth;
+    int depthset;
 	int timeset;
 	int movestogo;
     int infinite;
@@ -169,10 +167,6 @@ typedef struct {
 
 	float fh;
 	float fhf;
-	int nullCut;
-
-	int GAME_MODE;
-	int POST_THINKING;
 
 } S_SEARCHINFO;
 
@@ -287,6 +281,7 @@ extern int PieceValid(const int pce);
 
 extern void GenerateAllMoves(const S_BOARD *pos, S_MOVELIST *list);
 extern int MoveExists(S_BOARD *pos, const int move);
+extern int InitMvvLva();
 
 //makemove.cpp
 extern int MakeMove(S_BOARD *pos, int move);
