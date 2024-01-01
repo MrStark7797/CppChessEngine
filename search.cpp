@@ -121,9 +121,9 @@ static int Quiescence(int alpha, int beta, S_BOARD *pos, S_SEARCHINFO *info){
 		}
     }
 
-    /* if(alpha != OldAlpha){
+    if(alpha != OldAlpha){
         StorePvMove(pos, BestMove);
-    }  */
+    }
     return alpha;
 }
 static int AlphaBeta(int alpha, int beta, int depth, S_BOARD *pos, S_SEARCHINFO *info, int DoNull){
