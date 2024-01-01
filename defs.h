@@ -60,6 +60,7 @@ enum { RANK_1, RANK_2, RANK_3, RANK_4, RANK_5, RANK_6, RANK_7, RANK_8, RANK_NONE
 
 //Number Corrolating to the colour of the peice, 0 is white, 1 is black and 2 is both
 enum { WHITE, BLACK, BOTH};
+enum { UCIMODE};
 
 //the squares of the board
 //starts with A1 being on squarre 21 which starts the board while still having 56 boarder/spare squares
