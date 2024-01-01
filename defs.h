@@ -4,7 +4,7 @@
 
 
 #include <iostream>
-
+#include <string>
 
 //#define DEBUG
 
@@ -25,7 +25,8 @@ printf("At Line %d\n",__LINE__); \
 //creates bitboard
 typedef unsigned long long U64;
 
-const std::string NAME = "Slice 1.0";
+inline std::string NAME_S("Slice v1.0");
+inline char* NAME = NAME_S.data();
 
 #define BRD_SQ_NUM 120 //board will have 8x8 board where the game is played and 56 spare tiles to work as boarder squares
 
@@ -35,7 +36,7 @@ const int MAXDEPTH = 64;
 
 
 inline std::string START_FEN_STRING = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-inline const char* START_FEN = START_FEN_STRING.data(); 
+inline char* START_FEN = START_FEN_STRING.data(); 
 
 
 #define INFINITE 30000
@@ -167,8 +168,18 @@ typedef struct {
 
 	float fh;
 	float fhf;
+    int nullCut;
+
+
+    int GAME_MODE;
+	int POST_THINKING;
+
 
 } S_SEARCHINFO;
+
+typedef struct {
+	int UseBook;
+} S_OPTIONS;
 
 // GAME MOVE
 
@@ -295,6 +306,7 @@ extern int IsRepetition(const S_BOARD *pos);
 extern void SearchPosition(S_BOARD *pos, S_SEARCHINFO *info);
 //misc.cpp
 extern int GetTimeMs();
+extern void ReadInput(S_SEARCHINFO *info);
 //pvtable.cpp
 extern void InitPvTable(S_PVTABLE *table);
 extern int ProbePvTable(const S_BOARD *pos);
@@ -303,6 +315,8 @@ extern int GetPvLine(const int depth, S_BOARD *pos);
 extern void ClearPvTable(S_PVTABLE *table);
 //evaluate.cpp
 extern int EvalPosition(const S_BOARD *pos);
+//uci.cpp
+extern void Uci_Loop(S_BOARD *pos, S_SEARCHINFO *info);
 
 #endif 
 // DEFS_H

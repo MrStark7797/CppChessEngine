@@ -7,7 +7,7 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "CPPENGINE.cpp",
+                "slice.cpp",
                 "misc.cpp",
                 "hashkeys.cpp",
                 "data.cpp",
@@ -22,6 +22,7 @@
                 "perft.cpp",
                 "search.cpp",
                 "evaluate.cpp",
+                "uci.cpp",
                 
                 "pvtable.cpp",
                 

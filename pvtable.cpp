@@ -50,7 +50,7 @@ void InitPvTable(S_PVTABLE *table) {
     
     table->pTable = (S_PVENTRY *) malloc(table->numEntries * sizeof(S_PVENTRY));
 	ClearPvTable(table);
-    printf("PvTable init complete with %d entries\n", table->numEntries);
+    
 	
 	
 }
