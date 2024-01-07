@@ -62,8 +62,8 @@ void ParseGo(char* line, S_SEARCHINFO *info, S_BOARD *pos) {
 		info->depth = MAXDEPTH;
 	}
 
-	printf("time:%d start:%d stop:%d depth:%d timeset:%d\n",
-		time,info->starttime,info->stoptime,info->depth,info->timeset);
+	/* printf("time:%d start:%d stop:%d depth:%d timeset:%d\n",
+		time,info->starttime,info->stoptime,info->depth,info->timeset); */
 	SearchPosition(pos, info);
 }
 
@@ -101,7 +101,7 @@ void ParsePosition(char* lineIn, S_BOARD *pos) {
               ptrChar++;
         }
     }
-	PrintBoard(pos);
+	//PrintBoard(pos);
 }
 void Uci_Loop(S_BOARD *pos, S_SEARCHINFO *info) {
 
@@ -136,14 +136,14 @@ void Uci_Loop(S_BOARD *pos, S_SEARCHINFO *info) {
             char* pstartpos = pstartpos_S.data(); 
             ParsePosition(pstartpos, pos);
         } else if (!strncmp(line, "go", 2)) {
-            printf("Seen Go..\n");
+            //printf("Seen Go..\n");
             ParseGo(line, info, pos);
         } else if (!strncmp(line, "quit", 4)) {
             info->quit = TRUE;
             break;
         } else if (!strncmp(line, "uci", 3)) {
             printf("id name %s\n",NAME);
-            printf("id author Bluefever\n");
+            printf("id author MrStark7797\n");
             printf("uciok\n");
         }
 		if(info->quit) break;

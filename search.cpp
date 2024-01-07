@@ -137,6 +137,8 @@ static int Quiescence(int alpha, int beta, S_BOARD *pos, S_SEARCHINFO *info){
 }
 static int AlphaBeta(int alpha, int beta, int depth, S_BOARD *pos, S_SEARCHINFO *info, int DoNull){
     ASSERT(CheckBoard(pos));
+	ASSERT(beta>alpha);
+	ASSERT(depth>=0);
     if(depth <= 0) {
 		return Quiescence(alpha, beta, pos, info);
 		// return EvalPosition(pos);
@@ -152,6 +154,11 @@ static int AlphaBeta(int alpha, int beta, int depth, S_BOARD *pos, S_SEARCHINFO 
 
 	if(pos->ply > MAXDEPTH - 1) {
 		return EvalPosition(pos);
+	}
+	int InCheck = SqAttacked(pos->KingSq[pos->side2move],pos->side2move^1,pos);
+
+	if(InCheck == TRUE) {
+		depth++;
 	}
     S_MOVELIST list[1];
     GenerateAllMoves(pos,list);
@@ -239,6 +246,9 @@ void SearchPosition(S_BOARD *pos, S_SEARCHINFO *info){
 
     for( currentDepth = 1; currentDepth <= info->depth; ++currentDepth){
         bestScore = AlphaBeta(-INFINITE, INFINITE, currentDepth, pos, info, TRUE);
+		if(info->stopped == TRUE) {
+				break;
+		}
         pvMoves = GetPvLine(currentDepth, pos);
 		bestMove = pos->PvArray[0];
 
