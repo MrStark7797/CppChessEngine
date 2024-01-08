@@ -39,8 +39,10 @@ void ParseGo(char* line, S_SEARCHINFO *info, S_BOARD *pos) {
 		movetime = atoi(ptr + 9);
 	}
 
-	if ((ptr = strstr(line,"depth"))) {
+	if ((ptr = strstr(line,"depth "))) {
 		depth = atoi(ptr + 6);
+	}else if(ptr = strstr(line,"depth")){
+        	depth = atoi(ptr + 5);
 	}
 
 	if(movetime != -1) {
