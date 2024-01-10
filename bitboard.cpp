@@ -47,3 +47,12 @@ void PrintBitBoard(U64 bb) {
 	}  
     printf("\n\n");
 }
+int checkBit(U64 bb, int n){
+  int mask = 1 << n;
+  int result = bb & mask;
+  if(result != 0){
+    return TRUE;
+  }else{
+    return FALSE;
+  }
+}

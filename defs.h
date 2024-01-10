@@ -258,6 +258,7 @@ extern void AllInit();
 extern void PrintBitBoard(U64 bb);
 extern int PopBit(U64 *bb);
 extern int CountBits(U64 b);
+extern int checkBit(U64 bb, int n);
 
 // hashkeys.cpp
 extern U64 GenPosKey(const S_BOARD *pos);

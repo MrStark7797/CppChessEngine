@@ -67,7 +67,39 @@ const int KingO[64] = {
 	-70	,	-70	,	-70	,	-70	,	-70	,	-70	,	-70	,	-70		
 };
 
+int PawnStructScore(const S_BOARD *pos, int side){
+	int score;
+	int pce;
+	int sq;
+	int pceNum;
+	int sq64;
+	if(side == WHITE){
+		pce = wP;
+	}else{
+		pce = bP;
+	}
+	//doubled
+	int pwnCnt = 0;
+	int dblNum = 0;
+	for(int fileN = 0; fileN < 7; fileN++){	
+		int pwnCnt = 0;
+		for(int rankN = 0; rankN < 7; rankN++){
+			int sq64 = SQ64((21 +(fileN)) + ((rankN)*10));
+			if (checkBit(pos->pawns[side], sq64) == 1){
+				pwnCnt++;
+			}
 
+		}
+		if(pwnCnt > 1){
+			dblNum = pwnCnt - 1;
+		}
+
+	}
+
+	
+
+	return score;
+}
 
 int EvalPosition(const S_BOARD *pos){
     ASSERT(CheckBoard(pos));
@@ -76,7 +108,6 @@ int EvalPosition(const S_BOARD *pos){
 	int pceNum;
 	int sq;
 	int score = pos->material[WHITE] - pos->material[BLACK];
-
     pce = wP;	
 	for(pceNum = 0; pceNum < pos->pieceNum[pce]; ++pceNum) {
 		sq = pos->pList[pce][pceNum];
@@ -166,5 +197,9 @@ int EvalPosition(const S_BOARD *pos){
 	
 
 	}
-    return score;
+    if(pos->side2move == WHITE) {
+		return score;
+	} else {
+		return -score;
+	}
 }

@@ -19,7 +19,13 @@ int main(){
     InitPvTable(pos->PvTable);
 	setbuf(stdin, NULL);
     setbuf(stdout, NULL);
-
+	/* std::string FEN1_S = "r1b1k2r/ppppnppp/2n2q2/2b5/3NP3/2P1N3/PP3PPP/RN1QKB1R b KQkq - 0 1";
+    char* FEN1 = FEN1_S.data();
+    printf("\n");
+    S_MOVELIST list[1];
+    ParseFen(FEN1, pos); */
+	
+	
     int ArgNum = 0;
 
     
@@ -42,6 +48,6 @@ int main(){
 		}
     free(pos->PvTable->pTable);
     fflush(stdin);
-    return 0;
-    } 
+    return 0; 
+    }
 }
