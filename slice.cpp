@@ -9,7 +9,7 @@
 
 int main(){
 
-    
+
     AllInit();
     
     S_BOARD pos[1];
