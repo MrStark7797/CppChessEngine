@@ -67,7 +67,7 @@ const int KingO[64] = {
 	-70	,	-70	,	-70	,	-70	,	-70	,	-70	,	-70	,	-70		
 };
 
-int PawnStructScore(const S_BOARD *pos, int side){
+/* int PawnStructScore(const S_BOARD *pos, int side){
 	int score;
 	int pce;
 	int sq;
@@ -99,7 +99,7 @@ int PawnStructScore(const S_BOARD *pos, int side){
 	
 
 	return score;
-}
+} */
 
 int EvalPosition(const S_BOARD *pos){
     ASSERT(CheckBoard(pos));

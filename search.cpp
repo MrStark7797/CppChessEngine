@@ -218,8 +218,8 @@ static int AlphaBeta(int alpha, int beta, int depth, S_BOARD *pos, S_SEARCHINFO 
             }
     }
     if(Legal == 0) {
-		if(SqAttacked(pos->KingSq[pos->side2move],pos->side2move^1,pos)) {
-			return -INFINITE + pos->ply; //Mate in ply n.o moves
+		if(InCheck) {
+			return -INFINITE + pos->ply;
 		} else {
 			return 0;
 		}
