@@ -208,6 +208,7 @@ static int AlphaBeta(int alpha, int beta, int depth, S_BOARD *pos, S_SEARCHINFO 
                         pos->searchKillers[1][pos->ply]= pos->searchKillers[0][pos->ply];
                         pos->searchKillers[0][pos->ply] = list->moves[MoveNum].move;
                     }
+					StorePvMove(pos, BestMove);
                     return beta;
                 }
                 alpha = Score;
