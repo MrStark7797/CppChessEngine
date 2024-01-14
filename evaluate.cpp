@@ -66,7 +66,7 @@ const int KingO[64] = {
 	-70	,	-70	,	-70	,	-70	,	-70	,	-70	,	-70	,	-70	,
 	-70	,	-70	,	-70	,	-70	,	-70	,	-70	,	-70	,	-70		
 };
-
+//Pawn Structure Score
 /* int PawnStructScore(const S_BOARD *pos, int side){
 	int score;
 	int pce;
