@@ -1,0 +1,2 @@
+all:
+	g++ slice.cpp misc.cpp hashkeys.cpp data.cpp attack.cpp init.cpp io.cpp bitboard.cpp makemove.cpp movegen.cpp validate.cpp board.cpp perft.cpp search.cpp evaluate.cpp uci.cpp pvtable.cpp -o slice -O2
