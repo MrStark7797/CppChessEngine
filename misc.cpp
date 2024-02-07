@@ -73,7 +73,7 @@ int InputWaiting()
 #endif
 }
 
-void ReadInput(S_SEARCHINFO *info) {
+/* void ReadInput(S_SEARCHINFO *info) {
   int             bytes;
   char            input[256] = "", *endc;
 
@@ -93,3 +93,4 @@ void ReadInput(S_SEARCHINFO *info) {
 		return;
     }
 }
+ */
