@@ -15,12 +15,6 @@ int PopBit(U64 *bb) {
   return BitTable[(fold * 0x783a9b23) >> 26];
 } //takes the first bit starting at the least significant bit. setting it to zero.
 
-int CountBits(U64 b) {
-  int r;
-  for(r = 0; b; r++, b &= b - 1);
-  return r;
-} //counts the total number iof bits
-
 void PrintBitBoard(U64 bb) {
     //Used to print and visualise any bitboard on the screen
 	U64 shiftMe = 1ULL;
@@ -28,17 +22,17 @@ void PrintBitBoard(U64 bb) {
 	int rank = 0;
 	int file = 0;
 	int sq = 0;
-	int sq64 = 0;
+
 
     //starts at 8th rank and file a moving down the table printing out the bitboard.
     printf("\n");
-	for(rank = RANK_8; rank >= RANK_1; --rank) {
-		for(file = FILE_A; file <= FILE_H; ++file) {
+	for(rank = RANK8; rank >= RANK1; --rank) {
+		for(file = FILEA; file <= FILEH; ++file) {
 			sq = FR2SQ(file,rank);	// 120 based		
-			sq64 = SQ64(sq); // 64 based
+			
 
             //if a bit is stored as 1 on the bit board the output will be X
-			if((shiftMe << sq64) & bb) 
+			if((shiftMe << sq) & bb) 
 				printf("X");
 			else 
 				printf("-");
@@ -47,6 +41,12 @@ void PrintBitBoard(U64 bb) {
 	}  
     printf("\n\n");
 }
+
+int CountBits(U64 b) {
+  int r;
+  for(r = 0; b; r++, b &= b - 1);
+  return r;
+} //counts the total number iof bits
 int checkBit(U64 bb, int n){
   int mask = 1 << n;
   int result = bb & mask;
