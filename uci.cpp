@@ -3,7 +3,7 @@
 #include <cstring>
 #define INPUTBUFFER 400 * 6
 
-/* 
+
 void ParseGo(char* line, S_SEARCHINFO *info, S_BOARD *pos) {
 
 	int depth = -1, movestogo = 30,movetime = -1;
@@ -151,4 +151,3 @@ void Uci_Loop(S_BOARD *pos, S_SEARCHINFO *info) {
 		if(info->quit) break;
     }
 }
- */
