@@ -56,3 +56,47 @@ int checkBit(U64 bb, int n){
     return FALSE;
   }
 }
+int pieceType2BB(int pieceType){
+  switch (pieceType){
+    case wP:
+      return iPawn;
+      break;
+    case bP:
+      return iPawn;
+      break;
+    case wN:
+      return iKnight;
+      break;
+    case bN:
+      return iKnight;
+      break;
+    case wB:
+      return iBishop;
+      break;
+    case bB:
+      return iBishop;
+      break;
+    case wR:
+      return iRook;
+      break;
+    case bR:
+      return iRook;
+      break;
+    case wQ:
+      return iQueen;
+      break;
+    case bQ:
+      return iQueen;
+      break;
+    case wK:
+      return iKing;
+      break;
+    case bK:
+      return iKing;
+      break;
+  }
+}
+/*
+enum{iWhite, iBlack, iPawn, iKnight, iBishop, iRook, iQueen, iKing, iOccupied, iEmpty};
+enum{wP, wN, wB, wR, wQ, wK, bP, bN, bB, bR, bQ, bK, noneType};
+*/

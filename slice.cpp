@@ -8,6 +8,7 @@
 
 
 int main(){
+	AllInit();
 	BOARD myBoard;
 	myBoard.pieceBB[0] = 0ULL;
 	int sq = FR2SQ(FILEA, RANK5);
