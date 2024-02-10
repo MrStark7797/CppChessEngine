@@ -56,15 +56,23 @@ int MakeMove(BOARD board, int move){
     } else if (move & MFLAGCA) {
         switch(to) {
             case C1:
+                U64 castleFBB = 1ULL << A1;
+                U64 castleTBB = 1ULL << D1;
                 MovePiece(A1, D1, board, toBB, fromBB);
 			break;
             case C8:
+                U64 castleFBB = 1ULL << A8;
+                U64 castleTBB = 1ULL << D8;
                 MovePiece(A8, D8, board, toBB, fromBB);
 			break;
             case G1:
+                U64 castleFBB = 1ULL << H1;
+                U64 castleTBB = 1ULL << F1;
                 MovePiece(H1, F1, board, toBB, fromBB);
 			break;
             case G8:
+                U64 castleFBB = 1ULL << H8;
+                U64 castleTBB = 1ULL << F8;
                 MovePiece(H8, F8, board, toBB, fromBB);
 			break;
             default: ASSERT(FALSE); break;
