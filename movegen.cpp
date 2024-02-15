@@ -36,8 +36,10 @@ void MovePiece(const int from, const int to, BOARD board, U64 toBB, U64 fromBB){
     board.occupiedBB            ^=  fromToBB;   // update occupied ...
     board.emptyBB               ^=  fromToBB;
 }
-void AddPiece(){
-
+void AddPiece(const int to, BOARD board, U64 toBB, int prPiece){
+    board.pieceBB[pieceType2BB(prPiece)]  ^=  toBB;   // update piece bitboard
+    board.pieceBB[board.side2move]  ^=  toBB;   // update white or black color bitboard
+    board.occupiedBB            ^=  toBB;
 };
 int MakeMove(BOARD board, int move){
     int from = SQ64(FROMSQ(move));
@@ -126,7 +128,7 @@ int MakeMove(BOARD board, int move){
     if(prPce != EMPTY)   {
         ASSERT(PieceValid(prPce) && !PiecePawn[prPce]);
         ClearPiece(toBB, board, to);
-        AddPiece(to, pos, prPce);
+        AddPiece(to, board, toBB, prPce);
     }
 	
 	if(board.getPieceFromSq(to) == wK || bK) {
@@ -136,15 +138,88 @@ int MakeMove(BOARD board, int move){
 	board.side2move ^= 1;
     HASH_SIDE;
 
-    ASSERT(CheckBoard(pos));
+    ASSERT(CheckBoard(board));
     	
-	if(SqAttacked(board.KingSq[side],board.side2move,pos))  {
-        TakeMove(pos);
+	if(SqAttacked(board.KingSq[side],board.side2move, board))  {
+        TakeMove(board);
         return FALSE;
     }
 
 	return TRUE;
 	
+}
+void TakeMove(BOARD board) {
+	
+	ASSERT(CheckBoard(board));
+	
+	board.hisPly--;
+    board.ply--;
+    
+	
+	ASSERT(board.hisPly >= 0 && board.hisPly < MAX_GAMEMOVES);
+	ASSERT(board.ply >= 0 && board.ply < MAX_DEPTH);
+	
+    int move = board.history[board.hisPly].move;
+    int from = SQ64(FROMSQ(move));
+    int to = SQ64(TOSQ(move));
+    int side = board.side2move;
+    U64 fromBB = 1ULL << from;
+    U64 toBB = 1ULL << to;
+    U64 fromToBB = fromBB ^ toBB; // |+
+    int pieceType = board.getPieceFromSq(from);
+	
+	ASSERT(SqOnBoard(from));
+    ASSERT(SqOnBoard(to));
+	
+	if(board.enPas != NO_SQ) HASH_EP;
+    HASH_CA;
+
+    board.castlePerm = board.history[board.hisPly].castlePerm;
+    board.fiftymove = board.history[board.hisPly].fiftyMove;
+    board.enPas = board.history[board.hisPly].enPas;
+
+    if(board.enPas != NO_SQ) HASH_EP;
+    HASH_CA;
+
+    board.side2move ^= 1;
+    HASH_SIDE;
+	
+	if(MFLAGEP & move) {
+        if(board.side2move == WHITE) {
+            AddPiece(to-10, board, toBB, bP);
+        } else {
+            AddPiece(to+10, board, toBB, wP);
+        }
+    } else if(MFLAGCA & move) {
+        switch(to) {
+            case C1: MovePiece(D1, A1, board, toBB, fromBB); break;
+            case C8: MovePiece(D8, A8, board, toBB, fromBB); break;
+            case G1: MovePiece(F1, H1, board, toBB, fromBB); break;
+            case G8: MovePiece(F8, H8, board, toBB, fromBB); break;
+            default: ASSERT(FALSE); break;
+        }
+    }
+	
+	MovePiece(to, from, board, toBB, fromBB);
+	
+	if(PieceKing[board.pieces[from]]) {
+        board.KingSq[board.side2move] = from;
+    }
+	
+	int captured = CAPTURED(move);
+    if(captured != EMPTY) {
+        ASSERT(PieceValid(captured));
+        AddPiece(to, board, captured);
+    }
+	
+	if(PROMOTED(move) != EMPTY)   {
+        ASSERT(PieceValid(PROMOTED(move)) && !PiecePawn[PROMOTED(move)]);
+        ClearPiece(from, board);
+        AddPiece(from, board, (PieceCol[PROMOTED(move)] == WHITE ? wP : bP));
+    }
+	
+    ASSERT(CheckBoard(board));
+
 }
 
     

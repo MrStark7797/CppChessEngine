@@ -202,5 +202,7 @@ extern void PrintBitBoard(U64 bb);
 extern int CountBits(U64 b);
 extern int checkBit(U64 bb, int n);
 extern int pieceType2BB(int pieceType);
+//attack.cpp
+extern int SqAttacked(const int sq, const int side, BOARD board);
 #endif 
 // DEFS_H
