@@ -160,6 +160,31 @@ class BOARD{
 
 
 };
+class SEARCHINFO{
+    
+	int starttime;
+	int stoptime;
+	int depth;
+    int depthset;
+	int timeset;
+	int movestogo;
+    int infinite;
+
+	long nodes;//count of positioins engine visists in the search tree.
+
+	int quit;//clean up and exit
+	int stopped; //bacjs oout of search using result f previous iteration.
+
+	float fh;
+	float fhf;
+    int nullCut;
+
+
+    int GAME_MODE;
+	int POST_THINKING;
+
+
+};
 //GAME MOVE
 
 #define FROMSQ(m) ((m) & 0x7F)
